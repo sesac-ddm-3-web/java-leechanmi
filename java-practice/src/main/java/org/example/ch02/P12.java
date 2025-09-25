@@ -1,4 +1,4 @@
-package org.example.chapter2;
+package org.example.ch02;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

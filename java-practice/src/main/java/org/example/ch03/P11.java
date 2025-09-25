@@ -1,4 +1,4 @@
-package org.example.chapter3;
+package org.example.ch03;
 
 import org.example.common.BaseClass;
 

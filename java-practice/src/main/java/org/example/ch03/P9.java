@@ -1,4 +1,4 @@
-package org.example.chapter3;
+package org.example.ch03;
 
 import java.util.Arrays;
 
