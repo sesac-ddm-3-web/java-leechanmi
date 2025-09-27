@@ -8,7 +8,7 @@ import org.example.common.BaseClass;
 
 public class P12 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("생년월일 입력 (YYYY-MM-DD): ");
         String input = in.nextLine();
 

@@ -7,7 +7,7 @@ public class P3_plus extends BaseClass {
     private final int RETRY_COUNT = 10;
 
     @Override
-    public void func() {
+    public void main() {
         int page = (int)(Math.random() * 1000) + 1;
 
         System.out.println("두꺼운 책의 아무 페이지나 펼쳤습니다. 몇 페이지일까요? (1~1000, 기회: 10번)");

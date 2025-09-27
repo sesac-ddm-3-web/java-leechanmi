@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P2 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         int a = 5;
         System.out.println("초기값: a = " + a);
 

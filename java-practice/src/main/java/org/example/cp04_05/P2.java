@@ -5,7 +5,7 @@ import org.example.common.BaseClass;
 // for 문으로 작성된 코드를 while 문으로 바꿔보기
 public class P2 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         int sum = 0;
 
         // 초기화, 조건식, 증감식이 한 줄에 명확하게 표현됨

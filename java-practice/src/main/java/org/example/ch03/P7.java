@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P7 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("첫 번째 수: ");
         int num1 = in.nextInt();
 

@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P10 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("국어: ");
         int kor = in.nextInt();
 

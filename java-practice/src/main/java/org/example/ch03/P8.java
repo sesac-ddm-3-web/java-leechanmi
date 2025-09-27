@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P8 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         int a = 10, b = 20, c = 30;
 
         System.out.println("a = " + a + ", b = " + b + ", c = " + c);

@@ -5,7 +5,7 @@ import org.example.common.BaseClass;
 // 상품 할인 및 포인트 계산기
 public class P2 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("상품의 원가를 입력하세요: ");
         double originalPrice = in.nextDouble();
 

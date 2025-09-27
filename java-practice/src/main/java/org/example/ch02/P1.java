@@ -5,7 +5,7 @@ import org.example.common.BaseClass;
 public class P1 extends BaseClass {
 
 	@Override
-	public void func() {
+	public void main() {
 		int age = 25;
 		double height = 175.5;
 		char grade = 'A';

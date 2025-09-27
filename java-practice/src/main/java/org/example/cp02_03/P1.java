@@ -5,7 +5,7 @@ import org.example.common.BaseClass;
 // 간단한 이자 계산기
 public class P1 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("원금을 입력하세요: ");
         long principal = in.nextLong();
 

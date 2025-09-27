@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P9 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("변환 방식을 선택하세요 (1: 섭씨→화씨, 2: 화씨→섭씨): ");
         String method = in.nextLine();
 

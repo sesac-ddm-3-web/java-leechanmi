@@ -6,7 +6,7 @@ public class P8 extends BaseClass {
     static int globalVar = 100;  // 전역 변수
 
     @Override
-    public void func() {
+    public void main() {
         int localVar = 10;       // 지역 변수
 
         System.out.println("메인 메소드에서:");

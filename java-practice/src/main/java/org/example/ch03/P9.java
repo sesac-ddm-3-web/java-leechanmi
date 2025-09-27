@@ -6,7 +6,7 @@ import org.example.common.BaseClass;
 
 public class P9 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("숫자 입력: ");
         int n = in.nextInt();
 

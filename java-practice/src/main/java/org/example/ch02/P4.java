@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P4 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         int doubleToInt = (int)3.14;
         byte intToByte = (byte)300;
         int charToInt = (int)'A';

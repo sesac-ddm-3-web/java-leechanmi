@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P5 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         System.out.print("정수 입력: ");
         String intStr = in.nextLine();
 

@@ -4,7 +4,7 @@ import org.example.common.BaseClass;
 
 public class P3 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         byte b = 10;
         int i = b;        // byte → int
         long l = i;       // int → long

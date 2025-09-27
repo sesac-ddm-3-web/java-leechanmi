@@ -6,7 +6,7 @@ public class P2 extends BaseClass {
     private static final String FORMAT = "%s %s바이트, 범위: %s ~ %s";
 
     @Override
-    public void func() {
+    public void main() {
         System.out.println(String.format(FORMAT, "byte:", Byte.SIZE, Byte.MIN_VALUE, Byte.MAX_VALUE));
         System.out.println(String.format(FORMAT, "short:", Short.SIZE, Short.MIN_VALUE, Short.MAX_VALUE));
         System.out.println(String.format(FORMAT, "int:", Integer.SIZE, Integer.MIN_VALUE, Integer.MAX_VALUE));

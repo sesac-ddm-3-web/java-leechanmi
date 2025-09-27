@@ -5,7 +5,7 @@ import org.example.common.BaseClass;
 // while 문으로 작성된 코드를 for 문으로 바꿔보기
 public class P1 extends BaseClass {
     @Override
-    public void func() {
+    public void main() {
         String input = "";
 
         // while (!input.equals("exit")) {
