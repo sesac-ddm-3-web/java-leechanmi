@@ -29,8 +29,7 @@ public class Main {
                 MenuAction action = router.get(menu);
                 isRunning = action.execute(context);
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                System.out.println("다시 시도해주세요.");
+                printErrorMessage(e);
             }
         }
     }
@@ -55,6 +54,7 @@ public class Main {
 
     public static void printErrorMessage(Exception e) {
         System.out.println(e.getMessage());
+        System.out.println("다시 시도해주세요.");
         System.out.println();
     }
 }
