@@ -7,8 +7,13 @@ import java.util.List;
 public class Calculator {
     private final CalculatorLog log;
 
-    public Calculator(CalculatorLog log) {
+    private Calculator(CalculatorLog log) {
         this.log = log;
+    }
+
+    public static Calculator create() {
+        CalculatorLog log = new CalculatorLog();
+        return new Calculator(log);
     }
 
     public String calculate(String expression) {

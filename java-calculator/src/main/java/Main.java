@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 import core.Calculator;
-import core.CalculatorLog;
 import menu.MenuAction;
 import menu.MenuContext;
 import menu.MenuRouter;
@@ -10,7 +9,7 @@ public class Main {
     private static final Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Calculator calculator = new Calculator(new CalculatorLog());
+        Calculator calculator = Calculator.create();
 
         MenuContext context = new MenuContext(in, calculator);
         MenuRouter router = new MenuRouter();
