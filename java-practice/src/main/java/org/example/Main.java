@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.ch02.P1;
+import org.example.ch.ch02.P1;
 import org.example.common.BaseClass;
 
 public class Main {
