@@ -1,4 +1,4 @@
-package org.example.common;
+package org.example.common.util;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ public class RandomTextGenerator {
 
     public static String generate(int length) {
         StringBuilder text = new StringBuilder();
-        while (text.length() >= length) {
+        while (text.length() < length) {
             text.append(generate());
         }
 

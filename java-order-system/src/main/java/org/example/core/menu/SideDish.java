@@ -1,18 +1,15 @@
 package org.example.core.menu;
 
-import org.example.common.IdGenerator;
+import lombok.Builder;
 
 public class SideDish extends MenuItem {
     private FoodSize size;
 
-    private SideDish(String id, String name, int price, MenuCategory category, int stock, int preparationTime, FoodSize size) {
+    @Builder
+    private SideDish(long id, String name, int price, MenuCategory category, int stock, int preparationTime,
+        FoodSize size) {
         super(id, name, price, category, stock, preparationTime);
         this.size = size;
-    }
-
-    public static SideDish create(String name, int price, MenuCategory category, int stock, int preparationTime, FoodSize size) {
-        String id = IdGenerator.generate();
-        return new SideDish(id, name, price, category, stock, preparationTime, size);
     }
 
     @Override

@@ -1,23 +1,17 @@
 package org.example.core.menu;
 
-import org.example.common.IdGenerator;
+import lombok.Builder;
 
 public class MainDish extends MenuItem {
     private CookingDifficulty difficulty;
     private int calories;
 
-    private MainDish(String id, String name, int price, MenuCategory category, int stock, int preparationTime,
+    @Builder
+    private MainDish(long id, String name, int price, MenuCategory category, int stock, int preparationTime,
         CookingDifficulty difficulty, int calories) {
         super(id, name, price, category, stock, preparationTime);
         this.difficulty = difficulty;
         this.calories = calories;
-    }
-
-    public static MainDish create(String name, int price, MenuCategory category, int stock, int preparationTime,
-        CookingDifficulty difficulty, int calories) {
-        String id = IdGenerator.generate();
-
-        return new MainDish(id, name, price, category, stock, preparationTime, difficulty, calories);
     }
 
     @Override
@@ -31,8 +25,4 @@ public class MainDish extends MenuItem {
         return this.preparationTime;
     }
 
-    @Override
-    public boolean isAvailable() {
-        return stock >= 0;
-    }
 }

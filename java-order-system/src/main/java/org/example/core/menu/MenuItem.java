@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Getter
 public abstract class MenuItem {
-    protected String id;
+    protected long id;
     protected String name;
     protected int price;
     protected MenuCategory category;
     protected int stock;
     protected int preparationTime;
 
-    protected MenuItem(String id, String name, int price, MenuCategory category, int stock, int preparationTime) {
+    protected MenuItem(long id, String name, int price, MenuCategory category, int stock, int preparationTime) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -24,7 +24,10 @@ public abstract class MenuItem {
 
     public abstract String getDescription();
     public abstract int getPreparationTime();
-    public abstract boolean isAvailable();
+
+    public boolean isAvailable() {
+        return stock > 0;
+    }
 
     public void reduceStock(int quantity) {
         if (!isAvailable()) {

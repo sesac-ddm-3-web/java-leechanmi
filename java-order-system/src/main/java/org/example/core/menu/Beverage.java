@@ -1,18 +1,17 @@
 package org.example.core.menu;
 
-import org.example.common.IdGenerator;
+import lombok.Builder;
 
 public class Beverage extends MenuItem {
     private int capacity;
     private TemperatureOption temperatureOption;
 
-    private Beverage(String id, String name, int price, MenuCategory category, int stock, int preparationTime) {
+    @Builder
+    private Beverage(long id, String name, int price, MenuCategory category, int stock, int preparationTime,
+        int capacity, TemperatureOption temperatureOption) {
         super(id, name, price, category, stock, preparationTime);
-    }
-
-    public static Beverage create(String name, int price, MenuCategory category, int stock, int preparationTime) {
-        String id = IdGenerator.generate();
-        return new Beverage(id, name, price, category, stock, preparationTime);
+        this.capacity = capacity;
+        this.temperatureOption = temperatureOption;
     }
 
     @Override
