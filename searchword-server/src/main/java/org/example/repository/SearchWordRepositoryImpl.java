@@ -16,12 +16,12 @@ public class SearchWordRepositoryImpl implements SearchWordRepository {
     @Override
     public void upsert(SearchWord searchWord) {
         SearchWordStat searchWordStat = datasource.getSearchWordStat();
-
+        searchWordStat.upsert(searchWord);
     }
 
     @Override
     public RankHistory getCurrentRankHistory() {
         SearchWordStat searchWordStat = datasource.getSearchWordStat();
-        // return searchWordStat.;
+        return searchWordStat.getCurrentRankHistory();
     }
 }

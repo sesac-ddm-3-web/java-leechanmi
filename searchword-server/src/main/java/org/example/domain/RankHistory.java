@@ -6,6 +6,4 @@ public class RankHistory {
     public RankHistory(SearchWord[] history) {
         this.history = history;
     }
-
-    // 마지막거 가져오기
 }
