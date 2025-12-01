@@ -1,0 +1,218 @@
+<!-- post-detail.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 상세 - Simple Board</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="common.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-title">게시글 상세</div>
+      <div class="header-nav">
+        <a href="posts.html">목록으로</a>
+        <button type="button" onclick="logout()">로그아웃</button>
+      </div>
+    </header>
+
+    <section id="postSection">
+      <div class="post-detail-title" id="postTitle"></div>
+      <div class="post-detail-meta" id="postMeta"></div>
+      <div class="post-detail-content" id="postContent"></div>
+      <div class="text-right">
+        <button id="deletePostBtn" class="btn btn-danger">게시글 삭제</button>
+      </div>
+    </section>
+
+    <section class="comments-section">
+      <h3 style="font-size: 16px; margin-bottom: 8px;">댓글</h3>
+      <div id="commentsContainer"></div>
+
+      <form id="commentForm" class="mt-16">
+        <div class="form-group">
+          <label for="commentContent">댓글 작성</label>
+          <textarea id="commentContent" name="content" required></textarea>
+        </div>
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary">등록</button>
+        </div>
+        <div id="commentError" class="error-message"></div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    requireAuth();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    if (!postId) {
+      alert('잘못된 접근입니다.');
+      window.location.href = 'posts.html';
+    }
+
+    const postTitleEl = document.getElementById('postTitle');
+    const postMetaEl = document.getElementById('postMeta');
+    const postContentEl = document.getElementById('postContent');
+    const commentsContainer = document.getElementById('commentsContainer');
+    const deletePostBtn = document.getElementById('deletePostBtn');
+
+    const commentForm = document.getElementById('commentForm');
+    const commentErrorEl = document.getElementById('commentError');
+
+    async function loadPost() {
+      try {
+        const res = await apiFetch(`/api/posts/${postId}`);
+        if (!res.ok) {
+          alert('게시글을 불러오지 못했습니다.');
+          window.location.href = 'posts.html';
+          return;
+        }
+
+        const data = await res.json();
+        renderPost(data);
+        renderComments(data.comments || []);
+      } catch (err) {
+        console.error(err);
+        alert('오류가 발생했습니다.');
+        window.location.href = 'posts.html';
+      }
+    }
+
+    function renderPost(post) {
+      postTitleEl.textContent = post.title;
+      postMetaEl.textContent = `${post.writerName} · 조회수 ${post.hit} · ${formatDateTime(post.createdAt)}`;
+      postContentEl.textContent = post.content;
+    }
+
+    function renderComments(comments) {
+      commentsContainer.innerHTML = '';
+      if (comments.length === 0) {
+        const empty = document.createElement('div');
+        empty.textContent = '아직 댓글이 없습니다.';
+        empty.style.fontSize = '14px';
+        empty.style.color = '#9ca3af';
+        commentsContainer.appendChild(empty);
+        return;
+      }
+
+      comments.forEach(comment => {
+        // ⚠️ comment.id / comment.writerName / comment.content / comment.createdAt 이 있다고 가정
+        const wrapper = document.createElement('div');
+        wrapper.className = 'comment-item';
+
+        const header = document.createElement('div');
+        header.className = 'comment-header';
+
+        const author = document.createElement('div');
+        author.className = 'comment-author';
+        author.textContent = comment.writerName;
+
+        const meta = document.createElement('div');
+        meta.className = 'comment-meta';
+        meta.textContent = formatDateTime(comment.createdAt);
+
+        header.appendChild(author);
+        header.appendChild(meta);
+
+        const content = document.createElement('div');
+        content.className = 'comment-content';
+        content.textContent = comment.content;
+
+        const actions = document.createElement('div');
+        actions.className = 'text-right';
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-outline';
+        deleteBtn.textContent = '삭제';
+        deleteBtn.style.marginTop = '4px';
+        deleteBtn.addEventListener('click', () => deleteComment(comment.id));
+
+        actions.appendChild(deleteBtn);
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(content);
+        wrapper.appendChild(actions);
+
+        commentsContainer.appendChild(wrapper);
+      });
+    }
+
+    async function deleteComment(commentId) {
+      if (!confirm('댓글을 삭제하시겠습니까?')) return;
+
+      try {
+        const res = await apiFetch(`/api/comments/${commentId}`, {
+          method: 'DELETE'
+        });
+
+        if (!res.ok) {
+          alert('댓글 삭제에 실패했습니다. (본인 댓글만 삭제할 수 있습니다.)');
+          return;
+        }
+
+        await loadPost();
+      } catch (err) {
+        console.error(err);
+        alert('댓글 삭제 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 댓글 작성
+    commentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      commentErrorEl.textContent = '';
+
+      const content = commentForm.commentContent.value.trim();
+      if (!content) {
+        commentErrorEl.textContent = '댓글 내용을 입력해주세요.';
+        return;
+      }
+
+      try {
+        const res = await apiFetch('/api/comments', {
+          method: 'POST',
+          body: JSON.stringify({ postId: Number(postId), content })
+        });
+
+        if (!res.ok) {
+          commentErrorEl.textContent = '댓글 등록에 실패했습니다.';
+          return;
+        }
+
+        commentForm.commentContent.value = '';
+        await loadPost();
+      } catch (err) {
+        console.error(err);
+        commentErrorEl.textContent = '댓글 등록 중 오류가 발생했습니다.';
+      }
+    });
+
+    // 게시글 삭제
+    deletePostBtn.addEventListener('click', async () => {
+      if (!confirm('게시글을 삭제하시겠습니까?')) return;
+
+      try {
+        const res = await apiFetch(`/api/posts/${postId}`, {
+          method: 'DELETE'
+        });
+
+        if (!res.ok) {
+          alert('게시글 삭제에 실패했습니다. (본인 게시글만 삭제할 수 있습니다.)');
+          return;
+        }
+
+        alert('삭제되었습니다.');
+        window.location.href = 'posts.html';
+      } catch (err) {
+        console.error(err);
+        alert('게시글 삭제 중 오류가 발생했습니다.');
+      }
+    });
+
+    loadPost();
+  </script>
+</body>
+</html>
