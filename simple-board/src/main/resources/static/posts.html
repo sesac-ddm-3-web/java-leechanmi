@@ -1,0 +1,152 @@
+<!-- posts.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록 - Simple Board</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="common.js"></script>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="header-title">게시글 목록</div>
+        <div class="header-nav">
+            <a href="new-post.html">새 글 쓰기</a>
+            <button type="button" onclick="logout()">로그아웃</button>
+        </div>
+    </header>
+
+    <table class="post-list">
+        <thead>
+        <tr>
+            <!-- 🔹 번호 컬럼 추가 -->
+            <th style="width: 8%;">번호</th>
+            <th style="width: 47%;">제목</th>
+            <th style="width: 15%;">작성자</th>
+            <th style="width: 10%;">조회수</th>
+            <th style="width: 20%;">작성일시</th>
+        </tr>
+        </thead>
+        <tbody id="postListBody">
+        </tbody>
+    </table>
+
+    <div id="listFooter" class="list-footer"></div>
+</div>
+
+<script>
+    // 로그인 안 돼 있으면 로그인 페이지로
+    requireAuth();
+
+    const tbody = document.getElementById('postListBody');
+    const footer = document.getElementById('listFooter');
+
+    let page = 0;
+    const size = 10;
+    let loading = false;
+    let hasNext = true;
+
+    // 🔹 지금까지 렌더링된 게시글 수 기반 번호
+    let postIndex = 1;
+
+    async function loadPosts() {
+        if (loading || !hasNext) return;
+        loading = true;
+        footer.textContent = '불러오는 중...';
+
+        try {
+            const res = await apiFetch(`/api/posts?page=${page}&size=${size}`);
+            if (!res.ok) {
+                footer.textContent = '목록을 불러오지 못했습니다.';
+                return;
+            }
+
+            const data = await res.json();
+
+            // 백에서 내려주는 구조: { posts: [...], pageInfo: {...} } 기준
+            const posts = data.posts || [];
+            renderPosts(posts);
+
+            hasNext = data.pageInfo?.hasNext ?? false;
+            page += 1;
+
+            if (!hasNext) {
+                if (posts.length === 0 && page === 1) {
+                    footer.textContent = '게시글이 없습니다.';
+                } else {
+                    footer.textContent = '마지막 페이지입니다.';
+                }
+            } else {
+                footer.textContent = '';
+            }
+        } catch (e) {
+            console.error(e);
+            footer.textContent = '오류가 발생했습니다.';
+        } finally {
+            loading = false;
+        }
+    }
+
+    function renderPosts(posts) {
+        posts.forEach(post => {
+            const tr = document.createElement('tr');
+            tr.className = 'post-row';
+
+            // 상세 페이지 이동
+            tr.addEventListener('click', () => {
+                // post.id가 응답에 꼭 포함돼 있어야 함 (PostSimpleResDto에 id 추가 필요)
+                window.location.href = `post-detail.html?id=${post.id}`;
+            });
+
+            // 🔹 번호 셀
+            const numTd = document.createElement('td');
+            numTd.textContent = postIndex++;
+
+            const titleTd = document.createElement('td');
+            titleTd.textContent = post.title;
+
+            const writerTd = document.createElement('td');
+            writerTd.textContent = post.writerName;
+
+            const hitTd = document.createElement('td');
+            hitTd.textContent = post.hit;
+
+            const dateTd = document.createElement('td');
+            dateTd.textContent = formatDateTime(post.createdAt);
+
+            tr.appendChild(numTd);
+            tr.appendChild(titleTd);
+            tr.appendChild(writerTd);
+            tr.appendChild(hitTd);
+            tr.appendChild(dateTd);
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    // 처음 로딩: 스크롤바가 생길 때까지 반복해서 가져오기
+    async function initialLoad() {
+        await loadPosts();
+
+        // 아직 내용이 적어서 스크롤이 안 생겼으면, hasNext가 true인 동안 계속 불러옴
+        while (hasNext && document.documentElement.scrollHeight <= window.innerHeight + 5) {
+            await loadPosts();
+        }
+    }
+
+    initialLoad();
+
+    // 무한 스크롤
+    window.addEventListener('scroll', () => {
+        const scrollBottom = window.innerHeight + window.scrollY;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // 거의 바닥 근처 오면 다음 페이지 로딩
+        if (scrollBottom >= docHeight - 200) {
+            loadPosts();
+        }
+    });
+</script>
+</body>
+</html>
